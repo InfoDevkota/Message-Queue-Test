@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Queue | front end</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        .message{
+            width: 300px;
+            border-style: solid;
+            border: 2px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap;" id="messages">
+
+    </div>
+
+    <script>
+        let socket = io("http://localhost:8080");
+        socket.on("message", data =>{
+            let box = document.getElementById('messages');
+
+            let div = document.createElement("div");
+            div.classList.add("message");
+
+            let message = document.createElement("span");
+            message.textContent = "Message: " + data.message;
+            let date = document.createElement("span");
+            date.textContent = "Timestamp: "+ new Date(data.timestamp);
+            let priority = document.createElement("span");
+            priority.textContent = "Priority: "+ data.priority;
+            let br = document.createElement("br");
+            let br2 = document.createElement("br");
+
+            div.appendChild(message);
+            div.appendChild(br);
+            div.appendChild(date);
+            div.appendChild(br2);
+            div.appendChild(priority);
+
+
+
+            box.insertBefore(div, box.childNodes[0]);
+        })
+
+        socket.on("connected", data =>{
+            console.log("Socket Connected");
+        })
+    </script>
+    
+</body>
+</html>
